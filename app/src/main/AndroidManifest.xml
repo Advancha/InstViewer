@@ -19,7 +19,8 @@
         </activity>
         <activity
             android:name=".AuthDlgActivity"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog">
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"
+            >
         </activity>
     </application>
 

@@ -2,6 +2,7 @@ package com.example.afanasenko.instviewer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -16,10 +18,16 @@ import java.util.List;
 
 public class AuthDlgActivity extends Activity {
 
+    private ProgressDialog mSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //super.onCreate(null);
+        mSpinner = new ProgressDialog(this);
+        mSpinner.setMessage("Loading...");
+        mSpinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_auth_dlg);
 
         String mAuthUrl = InstagramSession.AUTH_URL + "?client_id=" + InstagramSession.clientId + "&redirect_uri="
@@ -39,11 +47,14 @@ public class AuthDlgActivity extends Activity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                mSpinner.show();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                mSpinner.dismiss();
+
                 if (url.contains("?code=") && authComplete != true) {
                     Uri uri = Uri.parse(url);
                     authCode = uri.getQueryParameter("code");
