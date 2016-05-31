@@ -23,9 +23,9 @@ public class NetworkManager {
         new HttpRequestAsyncTask<String>(context, callback) {
             @Override
             protected String getData(String json) throws JSONException {
-                String token = "";
+                //String token = "";
                 JSONObject jsonObj = (JSONObject) new JSONTokener(json).nextValue();
-                token = jsonObj.getString("access_token");
+                String token = jsonObj.getString("access_token");
                 return token;
             }
         }.execute(url);
@@ -38,7 +38,6 @@ public class NetworkManager {
             protected List<String> getData(String json) throws JSONException {
                 List<String> mediaList = new ArrayList<String>();
                 JSONObject jsonObj = (JSONObject) new JSONTokener(json).nextValue();
-               // JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
                 JSONArray jsonArray= jsonObj.getJSONArray("data");
                 //String link="";
                 String media="";
@@ -65,7 +64,7 @@ public class NetworkManager {
         public void onFail(FailType failType);
     }
 
-    public static enum FailType {
+    public enum FailType {
         JSON, NETWORK
     }
 }

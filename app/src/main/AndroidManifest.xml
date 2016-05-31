@@ -17,11 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AuthDlgActivity"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog"
-            >
-        </activity>
+        <activity android:name=".ImageActivity"></activity>
     </application>
 
 </manifest>

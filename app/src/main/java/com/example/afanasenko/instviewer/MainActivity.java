@@ -11,9 +11,14 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -25,42 +30,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class MainActivity extends ListActivity {
-
-    ImageAdapter adapter;
+public class MainActivity extends AppCompatActivity {
+    private ProgressDialog mSpinner;
+    private InstagramSession instagramSession=new InstagramSession();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int requestCode = 1;
-        Intent i = new Intent(this,AuthDlgActivity.class);
-        startActivityForResult(i,requestCode);
+        String mAuthUrl = instagramSession.recieveAuthUrl();
+
+        InstagramWebViewClient instagramWebViewClient=new InstagramWebViewClient(this,instagramSession);
+
+        WebView web = (WebView) findViewById(R.id.webv);
+        web.getSettings().setJavaScriptEnabled(true);
+        web.loadUrl(mAuthUrl);
+        web.setWebViewClient(instagramWebViewClient);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {return;}
-
-        //TODO: Have to get ACCESS_TOKEN and USER_ID (there are constants now)
-
-        String mediaUrl = InstagramSession.API_URL + "/users/" + InstagramSession.user_id + "/media/recent/?access_token=" + InstagramSession.token;
-        Log.i("MEDIA URL", mediaUrl);
-        NetworkManager.getInstance().getMedia(this, mediaUrl, new NetworkManager.Callback<List<String>>() {
-            @Override
-            public void onData(List<String> data) {
-                Log.i("GOT MEDIA ASYNC", data.toString());
-                adapter=new ImageAdapter(MainActivity.this, data);
-                setListAdapter(adapter);
-            }
-            @Override
-            public void onFail(NetworkManager.FailType failType) {
-                Log.i("GOT MEDIA ASYNC", "FAIL");
-            }
-        });
-
-
-    }
 }
 
