@@ -24,10 +24,10 @@ import java.util.List;
 public class ImageAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> list;
+    private List<ImageData> list;
 
 
-    public ImageAdapter(Context context, List<String> list) {
+    public ImageAdapter(Context context, List<ImageData> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,7 +38,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int i) {
+    public ImageData getItem(int i) {
         return list.get(i);
     }
 
@@ -51,7 +51,7 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ImageView imageView = new ImageView(context);
         Picasso.with(context)
-                .load(getItem(i))
+                .load(getItem(i).getMedia())
                 .into(imageView);
         return imageView;
     }
